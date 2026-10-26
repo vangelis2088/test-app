@@ -22,10 +22,16 @@ def init_db() -> None:
                 author TEXT,
                 source TEXT NOT NULL CHECK(source IN ('organizer', 'attendee')),
                 created_at TEXT NOT NULL
-                    DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+                    DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                answered INTEGER NOT NULL DEFAULT 0
             )
             """
         )
+        columns = [r["name"] for r in conn.execute("PRAGMA table_info(topics)")]
+        if "answered" not in columns:
+            conn.execute(
+                "ALTER TABLE topics ADD COLUMN answered INTEGER NOT NULL DEFAULT 0"
+            )
         conn.execute(
             "CREATE UNIQUE INDEX IF NOT EXISTS ux_topics_organizer_title "
             "ON topics(title) WHERE source = 'organizer'"
@@ -40,6 +46,10 @@ def init_db() -> None:
                     DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
             )
             """
+        )
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS deleted_organizer_titles "
+            "(title TEXT PRIMARY KEY)"
         )
     conn.close()
 
@@ -58,8 +68,10 @@ def load_organizer_topics() -> None:
     conn = get_conn()
     with conn:
         conn.executemany(
-            "INSERT OR IGNORE INTO topics (title, source) VALUES (?, 'organizer')",
-            [(t,) for t in titles],
+            "INSERT OR IGNORE INTO topics (title, source) "
+            "SELECT ?, 'organizer' WHERE NOT EXISTS "
+            "(SELECT 1 FROM deleted_organizer_titles WHERE title = ?)",
+            [(t, t) for t in titles],
         )
     conn.close()
 
@@ -95,20 +107,59 @@ def cast_vote(voter_id: str, topic_id: int) -> bool:
 
 
 def list_topics(voter_id: str | None = None) -> list[sqlite3.Row]:
-    """List topics by votes desc then newest first, flagging the voter's own vote."""
+    """List topics, answered last, then votes desc, flagging the voter's vote."""
     conn = get_conn()
     rows = conn.execute(
         """
-        SELECT t.id, t.title, t.author, t.source, t.created_at,
+        SELECT t.id, t.title, t.author, t.source, t.created_at, t.answered,
                (SELECT COUNT(*) FROM votes v WHERE v.topic_id = t.id) AS votes,
                EXISTS(
                    SELECT 1 FROM votes v
                    WHERE v.topic_id = t.id AND v.voter_id = ?
                ) AS voted
         FROM topics t
-        ORDER BY votes DESC, t.created_at DESC, t.id DESC
+        ORDER BY t.answered ASC, votes DESC, t.created_at DESC, t.id DESC
         """,
         (voter_id,),
     ).fetchall()
     conn.close()
     return rows
+
+
+def list_topics_for_export() -> list[sqlite3.Row]:
+    """Return all topics incl. author, answered and vote count, by votes desc."""
+    conn = get_conn()
+    rows = conn.execute(
+        """
+        SELECT t.id, t.title, t.author, t.source, t.answered, t.created_at,
+               (SELECT COUNT(*) FROM votes v WHERE v.topic_id = t.id) AS votes
+        FROM topics t
+        ORDER BY votes DESC, t.created_at DESC, t.id DESC
+        """
+    ).fetchall()
+    conn.close()
+    return rows
+
+
+def mark_answered(topic_id: int) -> bool:
+    """Mark a topic as answered; False if the topic does not exist."""
+    conn = get_conn()
+    with conn:
+        cur = conn.execute("UPDATE topics SET answered = 1 WHERE id = ?", (topic_id,))
+    conn.close()
+    return cur.rowcount > 0
+
+
+def delete_topic(topic_id: int) -> bool:
+    """Delete a topic and its votes (organizer titles are tombstoned)."""
+    conn = get_conn()
+    with conn:
+        conn.execute(
+            "INSERT OR IGNORE INTO deleted_organizer_titles (title) "
+            "SELECT title FROM topics WHERE id = ? AND source = 'organizer'",
+            (topic_id,),
+        )
+        conn.execute("DELETE FROM votes WHERE topic_id = ?", (topic_id,))
+        cur = conn.execute("DELETE FROM topics WHERE id = ?", (topic_id,))
+    conn.close()
+    return cur.rowcount > 0

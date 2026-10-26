@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Moderate topics</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    ul.topics { list-style: none; padding: 0; }
+    ul.topics li { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; padding: .75rem .5rem; border-bottom: 1px solid #ddd; }
+    .badge { background: #fde68a; border-radius: .5rem; padding: .1rem .5rem; font-size: .8rem; }
+    .author { color: #666; font-size: .9rem; }
+    .title { flex: 1 1 100%; white-space: pre-line; overflow-wrap: anywhere; }
+    .votes { margin-left: auto; font-weight: 600; white-space: nowrap; }
+    button { font: inherit; min-height: 44px; padding: .4rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Moderate topics</h1>
+  <div id="mod-list">
+    {% include "_moderate_list.html" %}
+  </div>
+</body>
+</html>

@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import Cookie, FastAPI, Form, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 
-from app import db
+from app import db, export, moderation
 
 templates = Jinja2Templates(directory="templates")
 
@@ -21,6 +21,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="My Voting App", lifespan=lifespan)
+app.include_router(moderation.router)
+app.include_router(export.router)
 
 
 def render(request, name, voter_id, is_new_voter, error=None, status_code=200):

@@ -1,0 +1,18 @@
+<ul class="topics">
+  {% for topic in topics %}
+  <li{% if topic.answered %} class="answered" style="opacity:.5"{% endif %}>
+    <span class="title">{{ topic.title }}</span>
+    {% if topic.author %}<span class="author">by {{ topic.author }}</span>{% endif %}
+    <span class="votes">{{ topic.votes }} vote{{ '' if topic.votes == 1 else 's' }}</span>
+    {% if not topic.answered %}
+    <button type="button" hx-post="/moderate/topics/{{ topic.id }}/answer"
+            hx-target="#mod-list" hx-swap="innerHTML">Mark answered</button>
+    {% else %}<span class="badge">Answered</span>{% endif %}
+    <button type="button" hx-post="/moderate/topics/{{ topic.id }}/delete"
+            hx-target="#mod-list" hx-swap="innerHTML"
+            hx-confirm="Delete this topic and its votes?">Delete</button>
+  </li>
+  {% else %}
+  <li class="empty">No topics.</li>
+  {% endfor %}
+</ul>

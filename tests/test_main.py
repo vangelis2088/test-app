@@ -157,3 +157,12 @@ def test_stored_html_is_escaped_everywhere(client, payload):
         text = client.get(path).text
         assert payload not in text
         assert str(escape(payload)) in text
+
+
+def test_moderate_and_export_routers_are_mounted(client, monkeypatch):
+    monkeypatch.setenv("ADMIN_PASSWORD", "pw")
+    assert client.get("/moderate").status_code == 401
+    assert client.get("/moderate", auth=("mod", "pw")).status_code == 200
+    export_response = client.get("/export.md")
+    assert export_response.status_code == 200
+    assert "Organizer topic A" in export_response.text
