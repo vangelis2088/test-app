@@ -1,0 +1,22 @@
+- generic [active] [ref=e1]:
+  - heading "Vote for the next talk" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - textbox "Suggest a topic" [ref=e4]
+    - textbox "Your name (optional)" [ref=e5]
+    - button "Suggest" [ref=e6]
+  - list [ref=e8]:
+    - listitem [ref=e9]:
+      - text: "Tech deep dive: Forecast and Optimize: Replaying the development journey of processing and visualizing smart meter energy data, Greek market prices, uncertainty and energy demand recommendations Organizer's pick 0 votes"
+      - button "Vote" [ref=e10]
+    - listitem [ref=e11]:
+      - text: Handling sensitive personal data for research and managing partner access Organizer's pick 0 votes
+      - button "Vote" [ref=e12]
+    - listitem [ref=e13]:
+      - text: Physical internet Organizer's pick 0 votes
+      - button "Vote" [ref=e14]
+    - listitem [ref=e15]:
+      - text: "Marine Surveillance: From Data and Models to a Satellite Service Organizer's pick 0 votes"
+      - button "Vote" [ref=e16]
+    - listitem [ref=e17]:
+      - text: "In-situ Platform: Standards-Based Sensor Observation Management Organizer's pick 0 votes"
+      - button "Vote" [ref=e18]

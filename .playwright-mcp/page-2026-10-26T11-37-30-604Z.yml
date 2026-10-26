@@ -1,0 +1,28 @@
+- generic [active] [ref=e1]:
+  - heading "Vote for the next talk" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - textbox "Suggest a topic" [ref=e4]
+    - textbox "Your name (optional)" [ref=e5]
+    - button "Suggest" [ref=e6]
+  - list [ref=e62]:
+    - listitem [ref=e63]:
+      - text: E2E test topic 1 by Playwright 1 vote
+      - button "Voted" [disabled] [ref=e64]
+    - listitem [ref=e65]:
+      - text: E2E test topic 2 0 votes
+      - button "Vote" [ref=e66]
+    - listitem [ref=e67]:
+      - text: "Tech deep dive: Forecast and Optimize: Replaying the development journey of processing and visualizing smart meter energy data, Greek market prices, uncertainty and energy demand recommendations Organizer's pick 0 votes"
+      - button "Vote" [ref=e68]
+    - listitem [ref=e69]:
+      - text: Handling sensitive personal data for research and managing partner access Organizer's pick 0 votes
+      - button "Vote" [ref=e70]
+    - listitem [ref=e71]:
+      - text: Physical internet Organizer's pick 0 votes
+      - button "Vote" [ref=e72]
+    - listitem [ref=e73]:
+      - text: "Marine Surveillance: From Data and Models to a Satellite Service Organizer's pick 0 votes"
+      - button "Vote" [ref=e74]
+    - listitem [ref=e75]:
+      - text: "In-situ Platform: Standards-Based Sensor Observation Management Organizer's pick 0 votes"
+      - button "Vote" [ref=e76]

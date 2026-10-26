@@ -1,0 +1,16 @@
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+<ul class="topics">
+  {% for topic in topics %}
+  <li{% if topic.voted %} class="voted"{% endif %}>
+    <span class="title">{{ topic.title }}</span>
+    {% if topic.source == 'organizer' %}<span class="badge">Organizer's pick</span>{% endif %}
+    {% if topic.author %}<span class="author">by {{ topic.author }}</span>{% endif %}
+    <span class="votes">{{ topic.votes }} vote{{ '' if topic.votes == 1 else 's' }}</span>
+    <button type="button" class="vote-btn" hx-post="/topics/{{ topic.id }}/vote"
+            hx-target="#topics" hx-swap="innerHTML"
+            {% if topic.voted %}disabled{% endif %}>{{ 'Voted' if topic.voted else 'Vote' }}</button>
+  </li>
+  {% else %}
+  <li class="empty">No topics yet. Suggest the first one!</li>
+  {% endfor %}
+</ul>

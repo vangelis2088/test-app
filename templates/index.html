@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vote for the next talk</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    form { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.5rem; }
+    input, button { font: inherit; padding: .5rem; }
+    ul.topics { list-style: none; padding: 0; }
+    ul.topics li { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; padding: .75rem .5rem; border-bottom: 1px solid #ddd; }
+    .badge { background: #fde68a; border-radius: .5rem; padding: .1rem .5rem; font-size: .8rem; white-space: nowrap; }
+    .author { color: #666; font-size: .9rem; }
+    .title { flex: 1 1 100%; white-space: pre-line; overflow-wrap: anywhere; }
+    .error { color: #b91c1c; }
+    ul.topics li.voted { background: #dcfce7; }
+    .votes { margin-left: auto; font-weight: 600; white-space: nowrap; }
+    .vote-btn { min-width: 5rem; min-height: 44px; padding: .4rem 1rem; }
+    input { min-height: 44px; }
+    form button { min-height: 44px; }
+  </style>
+</head>
+<body>
+  <h1>Vote for the next talk</h1>
+  <form hx-post="/topics" hx-target="#topics" hx-swap="innerHTML"
+        hx-on::after-request="if (event.detail.successful) this.reset()">
+    <input type="text" name="title" maxlength="280" placeholder="Suggest a topic" required>
+    <input type="text" name="author" placeholder="Your name (optional)">
+    <button type="submit">Suggest</button>
+  </form>
+  <div id="topics" hx-get="/topics" hx-trigger="every 3s" hx-swap="innerHTML">
+    {% include "_topics.html" %}
+  </div>
+  <script>
+    // Let 422 validation responses swap in so the error message shows.
+    document.body.addEventListener("htmx:beforeSwap", function (e) {
+      if (e.detail.xhr.status === 422) {
+        e.detail.shouldSwap = true;
+        e.detail.isError = false;
+      }
+    });
+  </script>
+</body>
+</html>
