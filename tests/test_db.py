@@ -80,3 +80,53 @@ def test_load_organizer_topics_skips_invalid_entries(db, tmp_path):
 def test_load_organizer_topics_missing_file(db, tmp_path):
     db.load_organizer_topics(tmp_path / "missing.json")
     assert db.list_topics() == []
+
+
+VOTER = "a" * 32
+OTHER_VOTER = "b" * 32
+
+
+def _counts(db):
+    return {t["title"]: t["vote_count"] for t in db.list_topics()}
+
+
+def test_cast_vote_first_vote(db):
+    topic_id = db.create_topic("A")
+    db.cast_vote(VOTER, topic_id)
+    assert _counts(db) == {"A": 1}
+    assert db.voted_topic_id(VOTER) == topic_id
+
+
+def test_cast_vote_moves_vote(db):
+    a = db.create_topic("A")
+    b = db.create_topic("B")
+    db.cast_vote(VOTER, a)
+    db.cast_vote(VOTER, b)
+    assert _counts(db) == {"A": 0, "B": 1}
+    assert db.voted_topic_id(VOTER) == b
+
+
+def test_cast_vote_repeat_is_noop(db):
+    a = db.create_topic("A")
+    db.cast_vote(VOTER, a)
+    db.cast_vote(VOTER, a)
+    assert _counts(db) == {"A": 1}
+
+
+def test_cast_vote_unknown_topic(db):
+    with pytest.raises(LookupError):
+        db.cast_vote(VOTER, 999)
+    assert db.voted_topic_id(VOTER) is None
+
+
+def test_voted_topic_id_without_vote(db):
+    assert db.voted_topic_id(VOTER) is None
+
+
+def test_list_topics_sorted_by_votes_then_newest(db):
+    old = db.create_topic("old")
+    db.create_topic("mid")
+    db.create_topic("new")
+    db.cast_vote(VOTER, old)
+    db.cast_vote(OTHER_VOTER, old)
+    assert [t["title"] for t in db.list_topics()] == ["old", "new", "mid"]

@@ -14,7 +14,7 @@ Follow these steps in order:
 2. **Route**: add the route to `app/main.py`.
    - Validate input; return 422 for bad input and 404 for a missing resource.
    - Endpoints that change state and are called from the page return the
-     `_questions.html` partial so htmx can swap it in.
+     `_topics.html` partial so htmx can swap it in.
 3. **Tests**: in the matching test file add at least:
    happy path, not-found (if an id is involved), invalid input.
 4. **Changelog**: add a line under `## Unreleased` in `CHANGELOG.md`
