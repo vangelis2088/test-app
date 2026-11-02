@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"422","swap":true},{"code":"[45]..","swap":false,"error":true}]}'>
+  <title>Vote for the next talk</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    form { display: grid; gap: .5rem; margin-bottom: 2rem; }
+    input, textarea, button { font: inherit; padding: .5rem; }
+    #form-error { color: #b00020; }
+    ul { list-style: none; padding: 0; }
+    li { border-bottom: 1px solid #ddd; padding: .75rem 0; }
+    .meta { color: #666; font-size: .875rem; }
+    .badge { background: #ffe58a; color: #5c4400; border-radius: .25rem; padding: 0 .4rem; font-size: .75rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Vote for the next talk</h1>
+
+  <form hx-post="/topics" hx-target="#topics" hx-swap="innerHTML"
+        hx-on::after-request="if (event.detail.successful) { this.reset(); document.getElementById('form-error').innerHTML = ''; }">
+    <label>Topic
+      <textarea name="title" required maxlength="280" rows="2"></textarea>
+    </label>
+    <label>Your name (optional)
+      <input name="name" type="text">
+    </label>
+    <div id="form-error"></div>
+    <button type="submit">Suggest topic</button>
+  </form>
+
+  <div id="topics" hx-get="/topics" hx-trigger="every 3s" hx-swap="innerHTML">
+    {% include "_topics.html" %}
+  </div>
+</body>
+</html>
