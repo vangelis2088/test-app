@@ -86,10 +86,38 @@ def test_topics_partial_polls(client):
     assert "<html" not in response.text
 
 
-def test_title_is_escaped(client):
-    response = client.post("/topics", data={"title": "<script>alert(1)</script>"})
-    assert "<script>alert(1)</script>" not in response.text
-    assert "&lt;script&gt;" in response.text
+XSS_PAYLOADS = [
+    ("<script>alert(1)</script>", "&lt;script&gt;alert(1)&lt;/script&gt;"),
+    (
+        '<img src=x onerror="alert(1)">',
+        "&lt;img src=x onerror=&#34;alert(1)&#34;&gt;",
+    ),
+    (
+        '<div hx-post="/topics/1/vote" hx-trigger="load"></div>',
+        (
+            "&lt;div hx-post=&#34;/topics/1/vote&#34; hx-trigger=&#34;load&#34;&gt;"
+            "&lt;/div&gt;"
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize(("payload", "escaped"), XSS_PAYLOADS)
+def test_title_is_html_escaped_everywhere(client, payload, escaped):
+    created = client.post("/topics", data={"title": payload})
+    assert created.status_code == 200
+    # Every place a title is rendered: POST response, polled partial, full page.
+    for response in (created, client.get("/topics"), client.get("/")):
+        assert payload not in response.text
+        assert escaped in response.text
+
+
+def test_author_is_html_escaped(client):
+    payload = "<script>alert(1)</script>"
+    client.post("/topics", data={"title": "Safe title", "author": payload})
+    for response in (client.get("/topics"), client.get("/")):
+        assert payload not in response.text
+        assert "&lt;script&gt;" in response.text
 
 
 def test_restart_does_not_duplicate_organizer_topics(app_env, db_path):

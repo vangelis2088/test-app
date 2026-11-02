@@ -1,0 +1,69 @@
+- generic [active] [ref=f3e1]:
+  - heading "Suggest a topic" [level=1] [ref=f3e2]
+  - generic [ref=f3e3]:
+    - textbox "What should we discuss?" [ref=f3e4]
+    - textbox "Your name (optional)" [ref=f3e5]
+    - button "Suggest" [ref=f3e6]
+  - heading "Topics" [level=2] [ref=f3e7]
+  - list [ref=f3e9]:
+    - listitem [ref=f3e10]:
+      - generic [ref=f3e11]:
+        - text: Playwright test topic A
+        - generic [ref=f3e12]: — QA Bot
+      - generic [ref=f3e13]:
+        - generic [ref=f3e14]: 1 vote
+        - button "Your vote" [disabled] [ref=f3e15]
+    - listitem [ref=f3e16]:
+      - generic [ref=f3e17]: Playwright test topic B
+      - generic [ref=f3e18]:
+        - generic [ref=f3e19]: 0 votes
+        - button "Vote" [ref=f3e20]
+    - listitem [ref=f3e21]:
+      - generic [ref=f3e22]:
+        - text: Postgres performance tuning
+        - generic [ref=f3e23]: Organizer's pick
+      - generic [ref=f3e24]:
+        - generic [ref=f3e25]: 0 votes
+        - button "Vote" [ref=f3e26]
+    - listitem [ref=f3e27]:
+      - generic [ref=f3e28]:
+        - text: Kubernetes for small teams
+        - generic [ref=f3e29]: Organizer's pick
+      - generic [ref=f3e30]:
+        - generic [ref=f3e31]: 0 votes
+        - button "Vote" [ref=f3e32]
+    - listitem [ref=f3e33]:
+      - generic [ref=f3e34]:
+        - text: "Tech deep dive: Forecast and Optimize: Replaying the development journey of processing and visualizing smart meter energy data, Greek market prices, uncertainty and energy demand recommendations"
+        - generic [ref=f3e35]: Organizer's pick
+      - generic [ref=f3e36]:
+        - generic [ref=f3e37]: 0 votes
+        - button "Vote" [ref=f3e38]
+    - listitem [ref=f3e39]:
+      - generic [ref=f3e40]:
+        - text: Handling sensitive personal data for research and managing partner access
+        - generic [ref=f3e41]: Organizer's pick
+      - generic [ref=f3e42]:
+        - generic [ref=f3e43]: 0 votes
+        - button "Vote" [ref=f3e44]
+    - listitem [ref=f3e45]:
+      - generic [ref=f3e46]:
+        - text: Physical internet
+        - generic [ref=f3e47]: Organizer's pick
+      - generic [ref=f3e48]:
+        - generic [ref=f3e49]: 0 votes
+        - button "Vote" [ref=f3e50]
+    - listitem [ref=f3e51]:
+      - generic [ref=f3e52]:
+        - text: "Marine Surveillance: From Data and Models to a Satellite Service"
+        - generic [ref=f3e53]: Organizer's pick
+      - generic [ref=f3e54]:
+        - generic [ref=f3e55]: 0 votes
+        - button "Vote" [ref=f3e56]
+    - listitem [ref=f3e57]:
+      - generic [ref=f3e58]:
+        - text: "In-situ Platform: Standards-Based Sensor Observation Management"
+        - generic [ref=f3e59]: Organizer's pick
+      - generic [ref=f3e60]:
+        - generic [ref=f3e61]: 0 votes
+        - button "Vote" [ref=f3e62]

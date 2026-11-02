@@ -7,17 +7,23 @@
   <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"422","swap":true},{"code":"[45]..","swap":false,"error":true}]}'>
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; background: #fff; color: #222; }
+    body { font-family: system-ui, sans-serif; font-size: 16px; max-width: 40rem; margin: 1.5rem auto; padding: 0 1rem; background: #fff; color: #222; }
+    h1 { margin-top: 0; }
     form { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
-    input, button { font: inherit; padding: .5rem; }
+    /* 16px+ inputs stop iOS Safari zooming on focus; 44px is the minimum comfortable tap target. */
+    input, button { font: inherit; font-size: 1rem; padding: .5rem .75rem; min-height: 44px; box-sizing: border-box; }
     .error { color: #b00020; margin: 0; }
-    .topics { list-style: none; padding: 0; }
-    .topics li { padding: .75rem; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-    .topics li.voted { background: #eef6ff; border-left: 4px solid #2a6fdb; }
-    .vote { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
-    .vote-count { color: #444; font-variant-numeric: tabular-nums; }
-    .badge { background: #ffe08a; border-radius: 999px; padding: .1rem .5rem; font-size: .8rem; margin-left: .5rem; }
-    .author { color: #666; margin-left: .5rem; }
+    .topics { list-style: none; padding: 0; margin: 0; }
+    .topics li { padding: .75rem; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+    .topics li.voted { background: #eef6ff; border-left: 4px solid #2a6fdb; padding-left: calc(.75rem - 4px); }
+    .topic-body { flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.35; }
+    /* Count stacked above the button keeps the vote column narrow, leaving room for titles. */
+    .vote { display: flex; flex-direction: column; align-items: center; gap: .2rem; flex-shrink: 0; }
+    .vote-count { color: #444; font-size: .85rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .vote button { min-width: 5.5rem; white-space: nowrap; }
+    .voted .vote button:disabled { opacity: 1; color: #2a6fdb; background: #fff; border: 1px solid #2a6fdb; border-radius: 4px; font-weight: 600; }
+    .badge { display: inline-block; white-space: nowrap; background: #ffe08a; border-radius: 999px; padding: .1rem .5rem; font-size: .8rem; margin: .2rem 0 0 .25rem; }
+    .author { display: inline-block; color: #666; margin-left: .25rem; }
   </style>
 </head>
 <body>
