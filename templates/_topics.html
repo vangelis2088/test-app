@@ -1,0 +1,15 @@
+<div id="topic-list" hx-get="/topics" hx-trigger="every 3s" hx-swap="outerHTML">
+  {% if topics %}
+  <ul class="topics">
+    {% for topic in topics %}
+    <li>
+      <span class="title">{{ topic.title }}</span>
+      {% if topic.source == "organizer" %}<span class="badge">Organizer's pick</span>{% endif %}
+      {% if topic.author %}<span class="author">— {{ topic.author }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">No topics yet. Be the first to suggest one!</p>
+  {% endif %}
+</div>
