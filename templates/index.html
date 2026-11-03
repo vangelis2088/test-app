@@ -7,17 +7,24 @@
   <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"422","swap":true},{"code":"[45]..","swap":false,"error":true},{"code":"...","swap":true}]}'>
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
-    form { display: grid; gap: .5rem; margin-bottom: 2rem; }
-    input, button { font: inherit; padding: .4rem; }
-    .topics { list-style: none; padding: 0; }
-    .topic { display: flex; gap: .8rem; align-items: center; padding: .6rem .4rem; border-bottom: 1px solid #ddd; }
-    .topic.voted { background: #e8f5e9; border-left: 4px solid #2e7d32; }
-    .vote { display: flex; flex-direction: column; align-items: center; min-width: 4.5rem; }
-    .count { font-weight: bold; font-size: 1.2rem; }
-    .vote button { font-size: .8rem; padding: .2rem .5rem; }
-    .badge { background: #ffd54f; border-radius: 4px; padding: 0 .4rem; font-size: .8rem; margin-left: .3rem; }
-    .author { color: #666; font-size: .9rem; margin-left: .3rem; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 1rem auto 2rem; padding: 0 1rem; }
+    h1 { font-size: clamp(1.5rem, 6vw, 2rem); margin: .5rem 0 1rem; }
+    form { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
+    label { display: grid; gap: .25rem; font-weight: 500; }
+    input, button { font: inherit; padding: .5rem; }
+    input { width: 100%; min-height: 44px; }
+    form button { min-height: 44px; }
+    .topics { list-style: none; padding: 0; margin: 0; }
+    .topic { display: flex; gap: .75rem; align-items: flex-start; padding: .75rem .5rem; border-bottom: 1px solid #ddd; }
+    .topic.voted { background: #e8f5e9; box-shadow: inset 4px 0 0 #2e7d32; }
+    .vote { display: flex; flex-direction: column; align-items: center; gap: .25rem; flex: 0 0 4.75rem; }
+    .count { font-weight: bold; font-size: 1.2rem; line-height: 1; }
+    .vote button { width: 100%; min-height: 44px; font-size: .9rem; padding: .25rem; }
+    .vote button:disabled { background: #c8e6c9; color: #1b5e20; border: 1px solid #2e7d32; font-weight: 600; opacity: 1; }
+    .body { flex: 1; min-width: 0; overflow-wrap: anywhere; padding-top: .15rem; }
+    .badge { background: #ffd54f; border-radius: 4px; padding: 0 .4rem; font-size: .8rem; margin-left: .3rem; white-space: nowrap; }
+    .author { display: block; color: #666; font-size: .9rem; margin-top: .2rem; }
     .error { color: #b00020; }
   </style>
 </head>

@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - heading "Vote for the next talk" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - text: Topic
+      - textbox "Topic" [ref=e5]
+    - generic [ref=e6]:
+      - text: Your name (optional)
+      - textbox "Your name (optional)" [ref=e7]
+    - button "Suggest topic" [ref=e8]
+  - list [ref=e10]:
+    - listitem [ref=e11]:
+      - generic [ref=e12]:
+        - generic "0 votes" [ref=e13]: "0"
+        - button "Vote" [ref=e14]
+      - generic [ref=e15]: Postgres performance tuning Organizer's pick — Anonymous
+    - listitem [ref=e16]:
+      - generic [ref=e17]:
+        - generic "0 votes" [ref=e18]: "0"
+        - button "Vote" [ref=e19]
+      - generic [ref=e20]: Kubernetes for small teams Organizer's pick — Anonymous
+    - listitem [ref=e21]:
+      - generic [ref=e22]:
+        - generic "0 votes" [ref=e23]: "0"
+        - button "Vote" [ref=e24]
+      - generic [ref=e25]: "Tech deep dive: Forecast and Optimize: Replaying the development journey of processing and visualizing smart meter energy data, Greek market prices, uncertainty and energy demand recommendations Organizer's pick — Anonymous"
+    - listitem [ref=e26]:
+      - generic [ref=e27]:
+        - generic "0 votes" [ref=e28]: "0"
+        - button "Vote" [ref=e29]
+      - generic [ref=e30]: Handling sensitive personal data for research and managing partner access Organizer's pick — Anonymous
+    - listitem [ref=e31]:
+      - generic [ref=e32]:
+        - generic "0 votes" [ref=e33]: "0"
+        - button "Vote" [ref=e34]
+      - generic [ref=e35]: Physical internet Organizer's pick — Anonymous
+    - listitem [ref=e36]:
+      - generic [ref=e37]:
+        - generic "0 votes" [ref=e38]: "0"
+        - button "Vote" [ref=e39]
+      - generic [ref=e40]: "Marine Surveillance: From Data and Models to a Satellite Service Organizer's pick — Anonymous"
+    - listitem [ref=e41]:
+      - generic [ref=e42]:
+        - generic "0 votes" [ref=e43]: "0"
+        - button "Vote" [ref=e44]
+      - generic [ref=e45]: "In-situ Platform: Standards-Based Sensor Observation Management Organizer's pick — Anonymous"
