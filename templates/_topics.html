@@ -1,0 +1,14 @@
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+{% if topics %}
+<ul class="topics">
+  {% for topic in topics %}
+  <li class="topic">
+    <span class="title">{{ topic.title }}</span>
+    {% if topic.source == "organizer" %}<span class="badge">Organizer's pick</span>{% endif %}
+    <span class="author">— {{ topic.author or "Anonymous" }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No topics yet. Suggest the first one!</p>
+{% endif %}

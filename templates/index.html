@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vote for the next talk</title>
+  <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"422","swap":true},{"code":"[45]..","swap":false,"error":true},{"code":"...","swap":true}]}'>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    form { display: grid; gap: .5rem; margin-bottom: 2rem; }
+    input, button { font: inherit; padding: .4rem; }
+    .topics { list-style: none; padding: 0; }
+    .topic { padding: .6rem 0; border-bottom: 1px solid #ddd; }
+    .badge { background: #ffd54f; border-radius: 4px; padding: 0 .4rem; font-size: .8rem; margin-left: .3rem; }
+    .author { color: #666; font-size: .9rem; margin-left: .3rem; }
+    .error { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Vote for the next talk</h1>
+
+  <form hx-post="/topics" hx-target="#topics" hx-swap="innerHTML"
+        hx-on::after-request="if (event.detail.xhr.status === 200) this.reset()">
+    <label>Topic <input name="title" required maxlength="280"></label>
+    <label>Your name (optional) <input name="author"></label>
+    <button type="submit">Suggest topic</button>
+  </form>
+
+  <div id="topics" hx-get="/topics" hx-trigger="every 3s" hx-swap="innerHTML">
+    {% include "_topics.html" %}
+  </div>
+</body>
+</html>
