@@ -11,7 +11,11 @@
     form { display: grid; gap: .5rem; margin-bottom: 2rem; }
     input, button { font: inherit; padding: .4rem; }
     .topics { list-style: none; padding: 0; }
-    .topic { padding: .6rem 0; border-bottom: 1px solid #ddd; }
+    .topic { display: flex; gap: .8rem; align-items: center; padding: .6rem .4rem; border-bottom: 1px solid #ddd; }
+    .topic.voted { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+    .vote { display: flex; flex-direction: column; align-items: center; min-width: 4.5rem; }
+    .count { font-weight: bold; font-size: 1.2rem; }
+    .vote button { font-size: .8rem; padding: .2rem .5rem; }
     .badge { background: #ffd54f; border-radius: 4px; padding: 0 .4rem; font-size: .8rem; margin-left: .3rem; }
     .author { color: #666; font-size: .9rem; margin-left: .3rem; }
     .error { color: #b00020; }
