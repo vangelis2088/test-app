@@ -65,3 +65,20 @@ def test_list_topics_same_timestamp_tiebreak_by_id():
     with closing(db.connect()) as conn, conn:
         conn.execute("UPDATE topics SET created_at = '2026-01-01T00:00:00.000Z'")
     assert [t["title"] for t in db.list_topics()] == ["second", "first"]
+
+
+def test_cast_vote_unknown_topic_returns_false():
+    db.init_db()
+    assert db.cast_vote("voter-1", 12345) is False
+    assert db.get_vote("voter-1") is None
+
+
+def test_cast_vote_one_vote_per_voter():
+    db.init_db()
+    a = db.add_topic("a", None)
+    b = db.add_topic("b", None)
+    assert db.cast_vote("voter-1", a)
+    assert db.cast_vote("voter-1", a)
+    assert db.cast_vote("voter-1", b)
+    assert db.get_vote("voter-1") == b
+    assert {t["title"]: t["vote_count"] for t in db.list_topics()} == {"a": 0, "b": 1}

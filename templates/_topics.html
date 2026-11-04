@@ -1,10 +1,23 @@
 {% if topics %}
 <ul>
   {% for topic in topics %}
-  <li class="topic">
-    <span class="title">{{ topic.title }}</span>
-    {% if topic.source == "organizer" %}<span class="badge">Organizer's pick</span>{% endif %}
-    {% if topic.author %}<div class="author">by {{ topic.author }}</div>{% endif %}
+  {% set voted = topic.id == my_vote %}
+  <li class="topic{% if voted %} voted{% endif %}" id="topic-{{ topic.id }}">
+    <div class="topic-body">
+      <span class="title">{{ topic.title }}</span>
+      {% if topic.source == "organizer" %}<span class="badge">Organizer's pick</span>{% endif %}
+      {% if topic.author %}<div class="author">by {{ topic.author }}</div>{% endif %}
+    </div>
+    <div class="vote">
+      <span class="vote-count" aria-label="{{ topic.vote_count }} votes">{{ topic.vote_count }}</span>
+      <button type="button"
+              hx-post="/topics/{{ topic.id }}/vote"
+              hx-target="#topics"
+              hx-swap="innerHTML"
+              aria-pressed="{{ 'true' if voted else 'false' }}">
+        {{ "Your vote" if voted else "Vote" }}
+      </button>
+    </div>
   </li>
   {% endfor %}
 </ul>

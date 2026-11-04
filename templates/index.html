@@ -12,7 +12,11 @@
     input, button { font: inherit; padding: 0.5rem; }
     #form-error { color: #b00020; min-height: 1.2em; }
     ul { list-style: none; padding: 0; }
-    li { padding: 0.75rem 0; border-bottom: 1px solid #ddd; }
+    li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid #ddd; }
+    li.voted { background: #e8f4ff; border-left: 4px solid #1a73e8; }
+    .vote { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .vote-count { font-weight: bold; min-width: 2ch; text-align: right; }
+    li.voted button { background: #1a73e8; color: #fff; border: none; border-radius: 0.25rem; }
     .author { color: #666; font-size: 0.9em; }
     .badge { background: #ffe08a; border-radius: 0.25rem; padding: 0.1rem 0.4rem; font-size: 0.8em; margin-left: 0.4rem; }
   </style>

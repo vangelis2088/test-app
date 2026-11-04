@@ -19,6 +19,12 @@ CREATE TABLE IF NOT EXISTS topics (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS uq_organizer_title
     ON topics(title) WHERE source = 'organizer';
+CREATE TABLE IF NOT EXISTS votes (
+    voter_id TEXT PRIMARY KEY,
+    topic_id INTEGER NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+);
+CREATE INDEX IF NOT EXISTS ix_votes_topic ON votes(topic_id);
 """
 
 
@@ -29,6 +35,7 @@ def db_path() -> str:
 def connect() -> sqlite3.Connection:
     conn = sqlite3.connect(db_path())
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
 
@@ -53,9 +60,41 @@ def add_topic(title: str, author: str | None, source: str = "attendee") -> int:
 def list_topics() -> list[sqlite3.Row]:
     with closing(connect()) as conn:
         return conn.execute(
-            "SELECT id, title, author, source, created_at FROM topics "
-            "ORDER BY created_at DESC, id DESC"
+            "SELECT t.id, t.title, t.author, t.source, t.created_at, "
+            "COUNT(v.voter_id) AS vote_count "
+            "FROM topics t LEFT JOIN votes v ON v.topic_id = t.id "
+            "GROUP BY t.id "
+            "ORDER BY vote_count DESC, t.created_at DESC, t.id DESC"
         ).fetchall()
+
+
+def cast_vote(voter_id: str, topic_id: int) -> bool:
+    """Record or move this voter's single vote; return False if the topic is unknown."""
+    with closing(connect()) as conn, conn:
+        if (
+            conn.execute("SELECT 1 FROM topics WHERE id = ?", (topic_id,)).fetchone()
+            is None
+        ):
+            return False
+        conn.execute(
+            "INSERT INTO votes (voter_id, topic_id) VALUES (?, ?) "
+            "ON CONFLICT(voter_id) DO UPDATE SET topic_id = excluded.topic_id, "
+            "created_at = excluded.created_at "
+            "WHERE votes.topic_id != excluded.topic_id",
+            (voter_id, topic_id),
+        )
+        return True
+
+
+def get_vote(voter_id: str | None) -> int | None:
+    """Return the topic id this voter voted for, or None."""
+    if not voter_id:
+        return None
+    with closing(connect()) as conn:
+        row = conn.execute(
+            "SELECT topic_id FROM votes WHERE voter_id = ?", (voter_id,)
+        ).fetchone()
+        return row["topic_id"] if row else None
 
 
 def load_organizer_topics(path: str | Path) -> None:

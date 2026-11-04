@@ -1,4 +1,7 @@
+from fastapi.testclient import TestClient
+
 from app import db
+from app.main import app
 from tests.conftest import ORGANIZER_TITLES
 
 
@@ -79,3 +82,86 @@ def test_list_is_newest_first(client):
         client.post("/topics", data={"title": title})
     text = client.get("/topics").text
     assert text.index("newer topic") < text.index("older topic")
+
+
+def topic_id(title):
+    return next(t["id"] for t in db.list_topics() if t["title"] == title)
+
+
+def counts():
+    return {t["title"]: t["vote_count"] for t in db.list_topics()}
+
+
+def test_first_vote(client):
+    a = topic_id(ORGANIZER_TITLES[0])
+    response = client.post(f"/topics/{a}/vote")
+    assert response.status_code == 200
+    assert "<html" not in response.text
+    assert "voter_id" in response.cookies
+    assert counts()[ORGANIZER_TITLES[0]] == 1
+    assert f'class="topic voted" id="topic-{a}"' in response.text
+    assert "Your vote" in response.text
+
+
+def test_moving_a_vote(client):
+    a, b = (topic_id(t) for t in ORGANIZER_TITLES)
+    client.post(f"/topics/{a}/vote")
+    response = client.post(f"/topics/{b}/vote")
+    assert response.status_code == 200
+    assert counts() == {ORGANIZER_TITLES[0]: 0, ORGANIZER_TITLES[1]: 1}
+    assert f'class="topic voted" id="topic-{b}"' in response.text
+    assert f'class="topic voted" id="topic-{a}"' not in response.text
+
+
+def test_repeat_vote_does_nothing(client):
+    a = topic_id(ORGANIZER_TITLES[0])
+    client.post(f"/topics/{a}/vote")
+    response = client.post(f"/topics/{a}/vote")
+    assert response.status_code == 200
+    assert counts()[ORGANIZER_TITLES[0]] == 1
+
+
+def test_vote_unknown_topic(client):
+    response = client.post("/topics/99999/vote")
+    assert response.status_code == 404
+    assert sum(counts().values()) == 0
+
+
+def test_vote_invalid_topic_id(client):
+    response = client.post("/topics/abc/vote")
+    assert response.status_code == 422
+    assert sum(counts().values()) == 0
+
+
+def test_votes_from_different_browsers_add_up(client):
+    a = topic_id(ORGANIZER_TITLES[0])
+    client.post(f"/topics/{a}/vote")
+    other = TestClient(app)
+    other.post(f"/topics/{a}/vote")
+    assert counts()[ORGANIZER_TITLES[0]] == 2
+
+
+def test_malformed_voter_cookie_is_replaced(client):
+    a = topic_id(ORGANIZER_TITLES[0])
+    client.cookies.set("voter_id", "not-a-uuid")
+    response = client.post(f"/topics/{a}/vote")
+    assert response.status_code == 200
+    assert response.cookies["voter_id"] != "not-a-uuid"
+    assert counts()[ORGANIZER_TITLES[0]] == 1
+
+
+def test_index_sets_voter_cookie_once(client):
+    first = client.get("/")
+    assert "voter_id" in first.cookies
+    second = client.get("/")
+    assert "voter_id" not in second.cookies
+
+
+def test_list_sorted_by_votes_then_newest(client):
+    client.post("/topics", data={"title": "older topic"})
+    client.post("/topics", data={"title": "newer topic"})
+    client.post(f"/topics/{topic_id('older topic')}/vote")
+    text = client.get("/topics").text
+    assert text.index("older topic") < text.index("newer topic")
+    # Among zero-vote topics, newest first still applies.
+    assert text.index("newer topic") < text.index(ORGANIZER_TITLES[0])
