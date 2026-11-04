@@ -1,0 +1,13 @@
+{% if topics %}
+<ul>
+  {% for topic in topics %}
+  <li class="topic">
+    <span class="title">{{ topic.title }}</span>
+    {% if topic.source == "organizer" %}<span class="badge">Organizer's pick</span>{% endif %}
+    {% if topic.author %}<div class="author">by {{ topic.author }}</div>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No topics yet. Be the first to suggest one!</p>
+{% endif %}
