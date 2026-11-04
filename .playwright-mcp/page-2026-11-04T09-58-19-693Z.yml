@@ -1,0 +1,82 @@
+- generic [active] [ref=f1e1]:
+  - heading "Vote for the Next Talk" [level=1] [ref=f1e2]
+  - generic [ref=f1e3]:
+    - generic [ref=f1e4]: Suggest a topic
+    - textbox "Suggest a topic" [ref=f1e5]
+    - generic [ref=f1e6]: Your name (optional)
+    - textbox "Your name (optional)" [ref=f1e7]
+    - alert [ref=f1e8]
+    - button "Suggest" [ref=f1e9]
+  - heading "Topics" [level=2] [ref=f1e10]
+  - list [ref=f1e12]:
+    - listitem [ref=f1e13]:
+      - generic [ref=f1e14]:
+        - text: Kubernetes for small teams
+        - generic [ref=f1e15]: Organizer's pick
+      - generic [ref=f1e16]:
+        - generic "1 votes" [ref=f1e17]: "1"
+        - button "Your vote" [pressed] [ref=f1e18]
+    - listitem [ref=f1e19]:
+      - generic [ref=f1e20]: SupercalifragilisticSupercalifragilisticSupercalifragilisticSupercalifragilisticSupercalifragilisticSupercalifragilistic
+      - generic [ref=f1e21]:
+        - generic "0 votes" [ref=f1e22]: "0"
+        - button "Vote" [ref=f1e23]
+    - listitem [ref=f1e24]:
+      - generic [ref=f1e25]: Read https://example.com/a-very-long-link-without-any-spaces-that-people-paste-into-forms-all-the-time
+      - generic [ref=f1e26]:
+        - generic "0 votes" [ref=f1e27]: "0"
+        - button "Vote" [ref=f1e28]
+    - listitem [ref=f1e29]:
+      - generic [ref=f1e30]: "E2E: Lessons from on-call rotations"
+      - generic [ref=f1e31]:
+        - generic "0 votes" [ref=f1e32]: "0"
+        - button "Vote" [ref=f1e33]
+    - listitem [ref=f1e34]:
+      - generic [ref=f1e35]:
+        - text: "E2E: Accessibility audits in practice"
+        - generic [ref=f1e36]: by Playwright Tester
+      - generic [ref=f1e37]:
+        - generic "0 votes" [ref=f1e38]: "0"
+        - button "Vote" [ref=f1e39]
+    - listitem [ref=f1e40]:
+      - generic [ref=f1e41]:
+        - text: Postgres performance tuning
+        - generic [ref=f1e42]: Organizer's pick
+      - generic [ref=f1e43]:
+        - generic "0 votes" [ref=f1e44]: "0"
+        - button "Vote" [ref=f1e45]
+    - listitem [ref=f1e46]:
+      - generic [ref=f1e47]:
+        - text: "Tech deep dive: Forecast and Optimize: Replaying the development journey of processing and visualizing smart meter energy data, Greek market prices, uncertainty and energy demand recommendations"
+        - generic [ref=f1e48]: Organizer's pick
+      - generic [ref=f1e49]:
+        - generic "0 votes" [ref=f1e50]: "0"
+        - button "Vote" [ref=f1e51]
+    - listitem [ref=f1e52]:
+      - generic [ref=f1e53]:
+        - text: Handling sensitive personal data for research and managing partner access
+        - generic [ref=f1e54]: Organizer's pick
+      - generic [ref=f1e55]:
+        - generic "0 votes" [ref=f1e56]: "0"
+        - button "Vote" [ref=f1e57]
+    - listitem [ref=f1e58]:
+      - generic [ref=f1e59]:
+        - text: Physical internet
+        - generic [ref=f1e60]: Organizer's pick
+      - generic [ref=f1e61]:
+        - generic "0 votes" [ref=f1e62]: "0"
+        - button "Vote" [ref=f1e63]
+    - listitem [ref=f1e64]:
+      - generic [ref=f1e65]:
+        - text: "Marine Surveillance: From Data and Models to a Satellite Service"
+        - generic [ref=f1e66]: Organizer's pick
+      - generic [ref=f1e67]:
+        - generic "0 votes" [ref=f1e68]: "0"
+        - button "Vote" [ref=f1e69]
+    - listitem [ref=f1e70]:
+      - generic [ref=f1e71]:
+        - text: "In-situ Platform: Standards-Based Sensor Observation Management"
+        - generic [ref=f1e72]: Organizer's pick
+      - generic [ref=f1e73]:
+        - generic "0 votes" [ref=f1e74]: "0"
+        - button "Vote" [ref=f1e75]

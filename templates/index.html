@@ -12,13 +12,18 @@
     input, button { font: inherit; padding: 0.5rem; }
     #form-error { color: #b00020; min-height: 1.2em; }
     ul { list-style: none; padding: 0; }
-    li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid #ddd; }
-    li.voted { background: #e8f4ff; border-left: 4px solid #1a73e8; }
+    li { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.75rem; border-bottom: 1px solid #ddd; }
+    /* Inset shadow instead of a border so the highlighted row's text stays aligned. */
+    li.voted { background: #e8f4ff; box-shadow: inset 4px 0 0 #1a73e8; }
+    /* min-width: 0 lets the text column shrink; overflow-wrap breaks long URLs/words. */
+    .topic-body { min-width: 0; overflow-wrap: anywhere; }
     .vote { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
     .vote-count { font-weight: bold; min-width: 2ch; text-align: right; }
-    li.voted button { background: #1a73e8; color: #fff; border: none; border-radius: 0.25rem; }
+    /* 44px minimum touch target; fixed width so "Vote"/"Your vote" don't shift the row. */
+    .vote button { min-height: 44px; min-width: 6.5rem; border-radius: 0.25rem; }
+    li.voted button { background: #1a73e8; color: #fff; border: 1px solid #1a73e8; }
     .author { color: #666; font-size: 0.9em; }
-    .badge { background: #ffe08a; border-radius: 0.25rem; padding: 0.1rem 0.4rem; font-size: 0.8em; margin-left: 0.4rem; }
+    .badge { display: inline-block; white-space: nowrap; background: #ffe08a; border-radius: 0.25rem; padding: 0.1rem 0.4rem; font-size: 0.8em; margin-left: 0.4rem; }
   </style>
 </head>
 <body>
