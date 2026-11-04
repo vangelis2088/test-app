@@ -1,4 +1,6 @@
+import pytest
 from fastapi.testclient import TestClient
+from markupsafe import escape
 
 from app import db
 from app.main import app
@@ -48,6 +50,26 @@ def test_create_topic_escapes_html(client):
     response = client.post("/topics", data={"title": "<script>x</script>"})
     assert "<script>x</script>" not in response.text
     assert "&lt;script&gt;" in response.text
+
+
+XSS_PAYLOADS = [
+    "<script>alert(1)</script>",
+    '<img src=x onerror="alert(1)">',
+    '<div hx-post="/topics/1/vote" hx-trigger="load">x</div>',
+]
+
+
+@pytest.mark.parametrize("payload", XSS_PAYLOADS)
+def test_titles_and_authors_are_html_escaped_everywhere(client, payload):
+    """User-supplied text must never reach the page as live HTML."""
+    response = client.post("/topics", data={"title": payload, "author": payload})
+    assert response.status_code == 200
+    escaped = str(escape(payload))
+    # Every view that renders the list: POST response, polling partial, full page.
+    for page in (response.text, client.get("/topics").text, client.get("/").text):
+        assert payload not in page
+        assert f'<span class="title">{escaped}</span>' in page
+        assert f'<div class="author">by {escaped}</div>' in page
 
 
 def attendee_count():
