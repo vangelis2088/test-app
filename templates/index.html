@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vote for the next talk</title>
+  <meta name="htmx-config" content='{"responseHandling": [{"code": "204", "swap": false}, {"code": "[23]..", "swap": true}, {"code": "422", "swap": true, "error": false}, {"code": "[45]..", "swap": false, "error": true}, {"code": "...", "swap": false}]}'>
+  <script src="https://unpkg.com/htmx.org@2.0.4" crossorigin="anonymous"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    form { display: grid; gap: .5rem; margin-bottom: 2rem; }
+    input, textarea, button { font: inherit; padding: .5rem; }
+    button { min-height: 44px; cursor: pointer; }
+    ul { list-style: none; padding: 0; }
+    li { border-bottom: 1px solid #ddd; padding: .75rem .5rem; display: flex; gap: .75rem; align-items: center; justify-content: space-between; }
+    li.voted { background: #e8f4ff; box-shadow: inset 4px 0 0 #1a73e8; }
+    .body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    .vote { display: flex; gap: .5rem; align-items: center; white-space: nowrap; flex-shrink: 0; }
+    .vote button { min-width: 6.5rem; }
+    .count { font-variant-numeric: tabular-nums; }
+    li.voted button { background: #1a73e8; color: #fff; border: 1px solid #1a73e8; }
+    .meta { color: #666; font-size: .875rem; }
+    .badge { display: inline-block; white-space: nowrap; background: #ffe08a; border-radius: .25rem; padding: .1rem .4rem; font-size: .75rem; margin-left: .25rem; }
+    @media (max-width: 480px) {
+      body { margin: 1rem auto; }
+      h1 { font-size: 1.6rem; margin: 0 0 1rem; }
+      li { padding: .75rem .25rem .75rem .5rem; }
+      .vote { flex-direction: column; gap: .25rem; }
+      .vote button { min-width: 5.5rem; padding: .5rem; }
+      .count { font-size: .875rem; color: #444; }
+    }
+    .error { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Vote for the next talk</h1>
+
+  <form hx-post="/topics" hx-target="#topic-list" hx-swap="innerHTML"
+        hx-on::after-request="if (event.detail.xhr.status === 200) this.reset()">
+    <label for="title">Suggest a topic</label>
+    <textarea id="title" name="title" required maxlength="280" rows="2"></textarea>
+    <label for="author">Your name (optional)</label>
+    <input id="author" name="author" type="text">
+    <button type="submit">Suggest</button>
+  </form>
+
+  <div id="topic-list" hx-get="/topics" hx-trigger="every 3s" hx-swap="innerHTML">
+    {% include "_topics.html" %}
+  </div>
+</body>
+</html>
